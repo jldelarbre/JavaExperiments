@@ -4,9 +4,9 @@ import com.github.jldelarbre.javaExperiments.observer.observer.IObservablesEvent
 
 public interface IObservableTotosEvents2 extends IObservablesEvents {
 
-	void eventCommon();
+    void eventCommon();
 
-	void eventYoupla2();
+    void eventYoupla2();
 
-	void eventYouplaBoom2(String someParam);
+    void eventYouplaBoom2(String someParam);
 }

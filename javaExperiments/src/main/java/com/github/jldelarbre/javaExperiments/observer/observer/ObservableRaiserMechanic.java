@@ -1,76 +1,93 @@
 package com.github.jldelarbre.javaExperiments.observer.observer;
 
-public final class ObservableRaiserMechanic<ObserverType extends IObserver<ObservablesEventsType>, ObservablesEventsType extends IObservablesEvents> {
+import com.github.jldelarbre.javaExperiments.observer.observer.internal.IEventRaiserDefaultImpl;
+import com.github.jldelarbre.javaExperiments.observer.observer.internal.IObserverHolder;
+import com.github.jldelarbre.javaExperiments.observer.observer.internal.Observable;
+import com.github.jldelarbre.javaExperiments.observer.observer.internal.ObserverHolder;
 
-	private final IEventRaiser<? extends ObservablesEventsType> raiser;
+public final class ObservableRaiserMechanic<ObserverType extends IObserver<ObservablesEventsType>, ObservablesEventsType extends IObservablesEvents>
+        implements IObservableRaiserMechanic<ObserverType, ObservablesEventsType> {
 
-	private final Observable<ObserverType, ObservablesEventsType> observable;
+    private final IEventRaiser<? extends ObservablesEventsType> raiser;
 
-	private ObservableRaiserMechanic(IEventRaiser<? extends ObservablesEventsType> raiser,
-									 Observable<ObserverType, ObservablesEventsType> observable) {
-		this.raiser = raiser;
-		this.observable = observable;
-	}
+    private final Observable<ObserverType, ObservablesEventsType> observable;
 
-	public static <ObserverType extends IObserver<ObservablesEventsType>, ObservablesEventsType extends IObservablesEvents>
-		ObservableRaiserMechanic<ObserverType, ObservablesEventsType>
-		build(Class<? extends ObservablesEventsType> observablesEventsType,
-			  Class<ObserverType> observerType) {
+    private ObservableRaiserMechanic(IEventRaiser<? extends ObservablesEventsType> raiser,
+                                     Observable<ObserverType, ObservablesEventsType> observable) {
+        this.raiser = raiser;
+        this.observable = observable;
+    }
 
-		IObserverHolder observerHolder = ObserverHolder.build();
+    public static <ObserverType extends IObserver<ObservablesEventsType>, ObservablesEventsType extends IObservablesEvents>
+        ObservableRaiserMechanic<ObserverType, ObservablesEventsType>
+        build(Class<? extends ObservablesEventsType> observablesEventsType, Class<ObserverType> observerType) {
 
-		Observable<ObserverType, ObservablesEventsType> observable = Observable.build(observerType, observerHolder);
+        final IObserverHolder observerHolder = ObserverHolder.build();
 
-		final IEventRaiser<ObservablesEventsType> raiser =
-			IEventRaiserDefaultImpl.RaiserData.build(observablesEventsType, observable.getObserverHolder());
+        final Observable<ObserverType, ObservablesEventsType> observable =
+            Observable.build(observerType, observerHolder);
 
-		return new ObservableRaiserMechanic<>(raiser, observable);
-	}
+        final IEventRaiser<ObservablesEventsType> raiser =
+            IEventRaiserDefaultImpl.RaiserData.build(observablesEventsType, observable.getObserverHolder());
 
-	public static <ObserverType extends IObserver<ObservablesEventsType>, ObservablesEventsType extends IObservablesEvents>
-		ObservableRaiserMechanic<ObserverType, ObservablesEventsType>
-		build(Class<? extends ObservablesEventsType> observablesEventsType,
-			  Class<ObserverType> observerType,
-			  ObservableRaiserMechanic<?, ?> observableRaiserMechanic) {
+        return new ObservableRaiserMechanic<>(raiser, observable);
+    }
 
-		IObserverHolder observerHolder = observableRaiserMechanic.getObserverHolder();
+    public static <ObserverType extends IObserver<ObservablesEventsType>, ObservablesEventsType extends IObservablesEvents>
+        ObservableRaiserMechanic<ObserverType, ObservablesEventsType>
+        build(Class<? extends ObservablesEventsType> observablesEventsType,
+              Class<ObserverType> observerType,
+              IObservableRaiserMechanic<?, ?> observableRaiserMechanic) {
 
-		Observable<ObserverType, ObservablesEventsType> observable = Observable.build(observerType, observerHolder);
+        final IObserverHolder observerHolder = observableRaiserMechanic.getObserverHolder();
 
-		final IEventRaiser<ObservablesEventsType> raiser =
-			IEventRaiserDefaultImpl.RaiserData.build(observablesEventsType, observable.getObserverHolder());
+        final Observable<ObserverType, ObservablesEventsType> observable =
+            Observable.build(observerType, observerHolder);
 
-		return new ObservableRaiserMechanic<>(raiser, observable);
-	}
+        final IEventRaiser<ObservablesEventsType> raiser =
+            IEventRaiserDefaultImpl.RaiserData.build(observablesEventsType, observable.getObserverHolder());
 
-	public static <ObserverType extends IObserver<ObservablesEventsType>, ObservablesEventsType extends IObservablesEvents>
-		ObservableRaiserMechanic<ObserverType, ObservablesEventsType>
-		buildWithRaiser(Class<? extends ObservablesEventsType> observablesEventsType,
-						Class<ObserverType> observerType,
-						ObservableRaiserMechanic<?, ? extends ObservablesEventsType> observableRaiserMechanic) {
+        return new ObservableRaiserMechanic<>(raiser, observable);
+    }
 
-		IObserverHolder observerHolder = observableRaiserMechanic.getObserverHolder();
+    public static <ObserverType extends IObserver<ObservablesEventsType>, ObservablesEventsType extends IObservablesEvents>
+        ObservableRaiserMechanic<ObserverType, ObservablesEventsType>
+        buildWithRaiser(Class<? extends ObservablesEventsType> observablesEventsType,
+                        Class<ObserverType> observerType,
+                        IObservableRaiserMechanic<?, ? extends ObservablesEventsType> observableRaiserMechanic) {
 
-		Observable<ObserverType, ObservablesEventsType> observable = Observable.build(observerType, observerHolder);
+        final IObserverHolder observerHolder = observableRaiserMechanic.getObserverHolder();
 
-		final IEventRaiser<? extends ObservablesEventsType> raiser = observableRaiserMechanic.getRaiser();
+        final Observable<ObserverType, ObservablesEventsType> observable =
+            Observable.build(observerType, observerHolder);
 
-		return new ObservableRaiserMechanic<>(raiser, observable);
-	}
+        final IEventRaiser<? extends ObservablesEventsType> raiser = observableRaiserMechanic.getRaiser();
 
-	public IEventRaiser<? extends ObservablesEventsType> getRaiser() {
-		return raiser;
-	}
+        return new ObservableRaiserMechanic<>(raiser, observable);
+    }
 
-	public Observable<ObserverType, ObservablesEventsType> getObservable() {
-		return observable;
-	}
+    @Override
+    public IEventRaiser<? extends ObservablesEventsType> getRaiser() {
+        return this.raiser;
+    }
 
-	public IObserverHolder getObserverHolder() {
-		return observable.getObserverHolder();
-	}
+    @Override
+    public IObservable<ObserverType, ObservablesEventsType> getObservable() {
+        return this.observable;
+    }
 
-	public Class<ObserverType> getObserverType() {
-		return observable.getObserverType();
-	}
+    @Override
+    public IObserverHolder getObserverHolder() {
+        return this.observable.getObserverHolder();
+    }
+
+    @Override
+    public Class<? extends ObserverType> getObserverType() {
+        return this.observable.getObserverType();
+    }
+
+    @Override
+    public IObservableRaiserMechanic<ObserverType, ObservablesEventsType> getObservableRaiserMechanic() {
+        throw new UnsupportedOperationException("getObservableRaiserMechanic is expected to be used for delegation only");
+    }
 }

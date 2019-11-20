@@ -2,14 +2,17 @@ package com.github.jldelarbre.javaExperiments.observer.observer;
 
 public interface IObservable<ObserverType extends IObserver<ObservablesEventsType>, ObservablesEventsType extends IObservablesEvents> {
 
-	// enable/disable observer
-	// addObserver with priority
+    // addObserver with priority
 
-	Class<? extends ObserverType> getObserverType();
+    Class<? extends ObserverType> getObserverType();
 
-	void addObserver(ObserverType observer);
+    boolean addObserver(ObserverType observer);
 
-	void removeObserver(ObserverType observer);
+    boolean removeObserver(ObserverType observer);
 
-	void removeAllObservers();
+    void removeAllObservers();
+
+    boolean disableObservers();
+
+    boolean enableObservers();
 }
