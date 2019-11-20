@@ -3,8 +3,6 @@ package com.github.jldelarbre.javaExperiments.observer.observer;
 public interface IObservableDefaultImpl<ObserverType extends IObserver<ObservablesEventsType>, ObservablesEventsType extends IObservablesEvents>
 	extends IObservable<ObserverType, ObservablesEventsType> {
 
-	Class<ObserverType> getObserverType();
-
 	IObserverHolder getObserverHolder();
 
 	@Override

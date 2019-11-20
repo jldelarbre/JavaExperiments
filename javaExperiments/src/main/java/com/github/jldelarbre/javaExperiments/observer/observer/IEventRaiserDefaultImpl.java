@@ -72,8 +72,9 @@ public interface IEventRaiserDefaultImpl<ObservablesEventsType extends IObservab
 		}
 
 		public static <ObservablesEventsType extends IObservablesEvents>
-		RaiserData<ObservablesEventsType> build(Class<ObservablesEventsType> raisableObservablesEventsType,
-												IObserverHolder observerHolder) {
+			RaiserData<ObservablesEventsType> build(Class<? extends ObservablesEventsType> raisableObservablesEventsType,
+													IObserverHolder observerHolder) {
+
 			ObservablesEventsType observablesEventsType =
 				IEventRaiserDefaultImpl.build(raisableObservablesEventsType, observerHolder);
 			return new RaiserData<ObservablesEventsType>(observablesEventsType);

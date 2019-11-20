@@ -5,6 +5,8 @@ public interface IObservable<ObserverType extends IObserver<ObservablesEventsTyp
 	// enable/disable observer
 	// addObserver with priority
 
+	Class<? extends ObserverType> getObserverType();
+
 	void addObserver(ObserverType observer);
 
 	void removeObserver(ObserverType observer);

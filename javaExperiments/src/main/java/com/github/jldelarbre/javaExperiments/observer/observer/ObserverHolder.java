@@ -21,37 +21,40 @@ public final class ObserverHolder implements IObserverHolder {
 
 	@Override
 	public <ObserverType extends IObserver<ObservablesEventsType>, ObservablesEventsType extends IObservablesEvents>
-	void addObserver(Class<ObserverType> observerType, ObserverType observer) {
+	void addObserver(Class<? extends ObserverType> observerType, ObserverType observer) {
 		Collection<ObserverType> observers = getObservers(observerType);
 		observers.add(observer);
 	}
 
 	@Override
 	public <ObserverType extends IObserver<ObservablesEventsType>, ObservablesEventsType extends IObservablesEvents>
-	void removeObserver(Class<ObserverType> observerType, ObserverType observer) {
+	void removeObserver(Class<? extends ObserverType> observerType, ObserverType observer) {
 		Collection<ObserverType> observers = getObservers(observerType);
 		observers.remove(observer);
 	}
 
 	@Override
 	public <ObserverType extends IObserver<ObservablesEventsType>, ObservablesEventsType extends IObservablesEvents>
-	void removeAllObservers(Class<ObserverType> observerType) {
+	void removeAllObservers(Class<? extends ObserverType> observerType) {
 		Collection<ObserverType> observers = getObservers(observerType);
 		observers.clear();
 	}
 
 	@Override
 	public Collection<? extends IObserver<?>> getAllObservers() {
-		Set<? extends IObserver<?>> observers = observerType2ObserverSet.values().stream()
-			.reduce(new HashSet<>(),
-					(globalSet, typedObservers) -> {
-						@SuppressWarnings({ "rawtypes", "unchecked" })
-						GenericGlue<?> genericGlue = new GenericGlue(globalSet, typedObservers);
-						genericGlue.add();
-						return globalSet;
-					});
+		final Set<? extends IObserver<?>> observers =
+			this.observerType2ObserverSet.values().stream().reduce(new HashSet<>(), ObserverHolder::accumulate);
 
 		return observers;
+	}
+
+	private static
+		Set<? extends IObserver<?>> accumulate(Set<? extends IObserver<?>> globalSet, Set<? extends IObserver<?>> typedObservers) {
+
+		@SuppressWarnings({ "rawtypes", "unchecked" })
+		GenericGlue<?> genericGlue = new GenericGlue(globalSet, typedObservers);
+		genericGlue.add();
+		return globalSet;
 	}
 
 	private static class GenericGlue<ObserverType extends IObserver<?>> {
@@ -71,7 +74,7 @@ public final class ObserverHolder implements IObserverHolder {
 	}
 
 	private <ObserverType extends IObserver<ObservablesEventsType>, ObservablesEventsType extends IObservablesEvents>
-	Collection<ObserverType> getObservers(Class<ObserverType> observerType) {
+	Collection<ObserverType> getObservers(Class<? extends ObserverType> observerType) {
 		if (!observerType2ObserverSet.containsKey(observerType)) {
 			observerType2ObserverSet.put(observerType, new HashSet<>());
 		}

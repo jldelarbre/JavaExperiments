@@ -1,6 +1,6 @@
 package com.github.jldelarbre.javaExperiments.observer;
 
-public interface IToto extends IObservableToto {
+public interface IToto extends ITotoObservable {
 
 	void f();
 }

@@ -1,31 +1,31 @@
 package com.github.jldelarbre.javaExperiments.observer;
 
-public class ObserverTotoEvents1Events2 implements IObserverTotoEvents1Events2 {
+public class TotoEvents1Events2Observer implements ITotoEvents1Events2Observer {
 
 	public static class InnerObserverImpl implements IObservableTotosEvents1Events2 {
 		@Override
 		public void eventCommon() {
-			System.out.println("ObserverTotoEvents1Events2.eventCommon()");
+			System.out.println("TotoEvents1Events2Observer.eventCommon()");
 		}
 
 		@Override
 		public void eventYoupla1() {
-			System.out.println("ObserverTotoEvents1Events2.eventYoupla1()");
+			System.out.println("TotoEvents1Events2Observer.eventYoupla1()");
 		}
 
 		@Override
 		public void eventYouplaBoom1(String someParam) {
-			System.out.println("ObserverTotoEvents1Events2.eventYouplaBoom1(" + someParam + ")");
+			System.out.println("TotoEvents1Events2Observer.eventYouplaBoom1(" + someParam + ")");
 		}
 
 		@Override
 		public void eventYoupla2() {
-			System.out.println("ObserverTotoEvents1Events2.eventYoupla2()");
+			System.out.println("TotoEvents1Events2Observer.eventYoupla2()");
 		}
 
 		@Override
 		public void eventYouplaBoom2(String someParam) {
-			System.out.println("ObserverTotoEvents1Events2.eventYouplaBoom2(" + someParam + ")");
+			System.out.println("TotoEvents1Events2Observer.eventYouplaBoom2(" + someParam + ")");
 		}
 	}
 

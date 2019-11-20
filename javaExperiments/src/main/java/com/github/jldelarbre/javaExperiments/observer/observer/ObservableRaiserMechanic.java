@@ -4,42 +4,73 @@ public final class ObservableRaiserMechanic<ObserverType extends IObserver<Obser
 
 	private final IEventRaiser<? extends ObservablesEventsType> raiser;
 
-	private final ObserverData<ObserverType, ObservablesEventsType> observerData;
+	private final Observable<ObserverType, ObservablesEventsType> observable;
 
-	private ObservableRaiserMechanic(IEventRaiser<? extends ObservablesEventsType> raiser, ObserverData<ObserverType, ObservablesEventsType> observerData) {
+	private ObservableRaiserMechanic(IEventRaiser<? extends ObservablesEventsType> raiser,
+									 Observable<ObserverType, ObservablesEventsType> observable) {
 		this.raiser = raiser;
-		this.observerData = observerData;
+		this.observable = observable;
 	}
 
 	public static <ObserverType extends IObserver<ObservablesEventsType>, ObservablesEventsType extends IObservablesEvents>
-	ObservableRaiserMechanic<ObserverType, ObservablesEventsType> build(Class<ObservablesEventsType> observablesEventsType,
-																		ObserverData<ObserverType, ObservablesEventsType> observerData) {
+		ObservableRaiserMechanic<ObserverType, ObservablesEventsType>
+		build(Class<? extends ObservablesEventsType> observablesEventsType,
+			  Class<ObserverType> observerType) {
 
-		final IEventRaiser<ObservablesEventsType> raiser = IEventRaiserDefaultImpl.RaiserData.build(observablesEventsType, observerData.getObserverHolder());
+		IObserverHolder observerHolder = ObserverHolder.build();
 
-		return new ObservableRaiserMechanic<>(raiser, observerData);
+		Observable<ObserverType, ObservablesEventsType> observable = Observable.build(observerType, observerHolder);
+
+		final IEventRaiser<ObservablesEventsType> raiser =
+			IEventRaiserDefaultImpl.RaiserData.build(observablesEventsType, observable.getObserverHolder());
+
+		return new ObservableRaiserMechanic<>(raiser, observable);
 	}
 
 	public static <ObserverType extends IObserver<ObservablesEventsType>, ObservablesEventsType extends IObservablesEvents>
-	ObservableRaiserMechanic<ObserverType, ObservablesEventsType> build(IEventRaiser<? extends ObservablesEventsType> raiser,
-																		ObserverData<ObserverType, ObservablesEventsType> observerData) {
+		ObservableRaiserMechanic<ObserverType, ObservablesEventsType>
+		build(Class<? extends ObservablesEventsType> observablesEventsType,
+			  Class<ObserverType> observerType,
+			  ObservableRaiserMechanic<?, ?> observableRaiserMechanic) {
 
-		return new ObservableRaiserMechanic<>(raiser, observerData);
+		IObserverHolder observerHolder = observableRaiserMechanic.getObserverHolder();
+
+		Observable<ObserverType, ObservablesEventsType> observable = Observable.build(observerType, observerHolder);
+
+		final IEventRaiser<ObservablesEventsType> raiser =
+			IEventRaiserDefaultImpl.RaiserData.build(observablesEventsType, observable.getObserverHolder());
+
+		return new ObservableRaiserMechanic<>(raiser, observable);
+	}
+
+	public static <ObserverType extends IObserver<ObservablesEventsType>, ObservablesEventsType extends IObservablesEvents>
+		ObservableRaiserMechanic<ObserverType, ObservablesEventsType>
+		buildWithRaiser(Class<? extends ObservablesEventsType> observablesEventsType,
+						Class<ObserverType> observerType,
+						ObservableRaiserMechanic<?, ? extends ObservablesEventsType> observableRaiserMechanic) {
+
+		IObserverHolder observerHolder = observableRaiserMechanic.getObserverHolder();
+
+		Observable<ObserverType, ObservablesEventsType> observable = Observable.build(observerType, observerHolder);
+
+		final IEventRaiser<? extends ObservablesEventsType> raiser = observableRaiserMechanic.getRaiser();
+
+		return new ObservableRaiserMechanic<>(raiser, observable);
 	}
 
 	public IEventRaiser<? extends ObservablesEventsType> getRaiser() {
 		return raiser;
 	}
 
-	public ObserverData<ObserverType, ObservablesEventsType> getObserverData() {
-		return observerData;
+	public Observable<ObserverType, ObservablesEventsType> getObservable() {
+		return observable;
 	}
 
 	public IObserverHolder getObserverHolder() {
-		return observerData.getObserverHolder();
+		return observable.getObserverHolder();
 	}
 
 	public Class<ObserverType> getObserverType() {
-		return observerData.getObserverType();
+		return observable.getObserverType();
 	}
 }
