@@ -60,14 +60,14 @@ public final class Observable<ObservablesEventsType extends IObservablesEvents>
     }
 
     @Override
-    public boolean disableObservables() {
+    public boolean disable() {
         final boolean change = this.enable == true;
         this.enable = false;
         return change;
     }
 
     @Override
-    public boolean enableObservables() {
+    public boolean enable() {
         final boolean change = this.enable == false;
         this.enable = true;
         return change;

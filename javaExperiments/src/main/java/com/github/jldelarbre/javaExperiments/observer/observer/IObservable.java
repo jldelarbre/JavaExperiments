@@ -18,7 +18,53 @@ public interface IObservable<ObservablesEventsType extends IObservablesEvents> {
 
     int getNumObservers();
 
-    boolean disableObservables();
+    boolean disable();
 
-    boolean enableObservables();
+    boolean enable();
+
+    interface IProxy<ObservablesEventsType extends IObservablesEvents>
+            extends IObservable<ObservablesEventsType> {
+
+        IObservable<ObservablesEventsType> getObservable();
+
+        @Override
+        default Class<ObservablesEventsType> getObservablesEventsType() {
+            return getObservable().getObservablesEventsType();
+        }
+
+        @Override
+        default boolean addObserver(IObserver<ObservablesEventsType> observer) {
+            return getObservable().addObserver(observer);
+        }
+
+        @Override
+        default boolean removeObserver(IObserver<ObservablesEventsType> observer) {
+            return getObservable().removeObserver(observer);
+        }
+
+        @Override
+        default void removeAllObservers() {
+            getObservable().removeAllObservers();
+        }
+
+        @Override
+        default Set<IObserver<ObservablesEventsType>> getObservers() {
+            return getObservable().getObservers();
+        }
+
+        @Override
+        default int getNumObservers() {
+            return getObservable().getNumObservers();
+        }
+
+        @Override
+        default boolean disable() {
+            return getObservable().disable();
+        }
+
+        @Override
+        default boolean enable() {
+            return getObservable().enable();
+        }
+    }
 }

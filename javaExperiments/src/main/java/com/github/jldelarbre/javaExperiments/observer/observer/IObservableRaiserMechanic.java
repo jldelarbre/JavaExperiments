@@ -1,10 +1,7 @@
 package com.github.jldelarbre.javaExperiments.observer.observer;
 
-import com.github.jldelarbre.javaExperiments.observer.observer.internal.IIEventRaiserProxy;
-import com.github.jldelarbre.javaExperiments.observer.observer.internal.IObservableProxy;
-
 public interface IObservableRaiserMechanic<ObservablesEventsType extends IObservablesEvents>
-        extends IObservableProxy<ObservablesEventsType>, IIEventRaiserProxy<ObservablesEventsType> {
+        extends IObservable.IProxy<ObservablesEventsType>, IEventRaiser.IProxy<ObservablesEventsType> {
 
     IObservableRaiserMechanic<ObservablesEventsType> getObservableRaiserMechanic();
 

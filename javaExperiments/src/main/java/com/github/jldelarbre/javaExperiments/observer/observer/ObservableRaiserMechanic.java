@@ -23,7 +23,7 @@ public final class ObservableRaiserMechanic<ObservablesEventsType extends IObser
         this.observable = observable;
     }
 
-    public static class ObservableRaiserMechanicConstruction {
+    public static final class ObservableRaiserMechanicConstruction {
         private final Map<Class<? extends IObservablesEvents>, ObservableRaiserMechanic<?>> observableRaiserMechanicMap;
 
         private ObservableRaiserMechanicConstruction(Map<Class<? extends IObservablesEvents>, ObservableRaiserMechanic<?>> observableRaiserMechanicMap) {
