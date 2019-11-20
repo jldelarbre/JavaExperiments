@@ -11,7 +11,8 @@ import com.github.jldelarbre.javaExperiments.observer.observer.internal.Observab
 import com.github.jldelarbre.javaExperiments.observer.observer.internal.ObserverMerger;
 
 public final class ObservableRaiserMechanic<ObservablesEventsType extends IObservablesEvents>
-        implements IObservableRaiserMechanic<ObservablesEventsType> {
+        implements IObservableRaiserMechanic<ObservablesEventsType>,
+        IObservable.IProxy<ObservablesEventsType>, IEventRaiser.IProxy<ObservablesEventsType> {
 
     private final IEventRaiser<ObservablesEventsType> raiser;
 
@@ -92,10 +93,5 @@ public final class ObservableRaiserMechanic<ObservablesEventsType extends IObser
     @Override
     public IObservable<ObservablesEventsType> getObservable() {
         return this.observable;
-    }
-
-    @Override
-    public IObservableRaiserMechanic<ObservablesEventsType> getObservableRaiserMechanic() {
-        throw new UnsupportedOperationException("getObservableRaiserMechanic is expected to be used for delegation only");
     }
 }

@@ -8,7 +8,7 @@ import com.github.jldelarbre.javaExperiments.observer.observer.IObservablesEvent
 import com.github.jldelarbre.javaExperiments.observer.observer.ObservableRaiserMechanic;
 import com.github.jldelarbre.javaExperiments.observer.observer.ObservableRaiserMechanic.ObservableRaiserMechanicConstruction;
 
-public class Toto implements IToto, IObservableRaiserMechanic<IObservableTotosEvents1Events2> {
+public class Toto implements IToto, IObservableRaiserMechanic.IProxy<IObservableTotosEvents1Events2> {
 
     private final IObservableRaiserMechanic<IObservableTotosEvents1Events2> observableRaiserMechanic;
     private final IObservableRaiserMechanic<IObservableTotosEvents1> observableRaiserMechanicTotosEvents1;
@@ -46,7 +46,7 @@ public class Toto implements IToto, IObservableRaiserMechanic<IObservableTotosEv
         this.observableRaiserMechanicTotosEvents1 = observableRaiserMechanicTotosEvents1;
         this.observableRaiserMechanicTotosEvents3 = observableRaiserMechanicTotosEvents3;
 
-        this.raiser3 = observableRaiserMechanicTotosEvents3.getRaiser();
+        this.raiser3 = observableRaiserMechanicTotosEvents3;
     }
 
     @Override
@@ -69,11 +69,11 @@ public class Toto implements IToto, IObservableRaiserMechanic<IObservableTotosEv
 
     @Override
     public IObservable<IObservableTotosEvents1> manageTotoEvents1Observable() {
-        return this.observableRaiserMechanicTotosEvents1.getObservable();
+        return this.observableRaiserMechanicTotosEvents1;
     }
 
     @Override
     public IObservable<IObservableTotosEvents3> manageTotoEvents3Observable() {
-        return this.observableRaiserMechanicTotosEvents3.getObservable();
+        return this.observableRaiserMechanicTotosEvents3;
     }
 }

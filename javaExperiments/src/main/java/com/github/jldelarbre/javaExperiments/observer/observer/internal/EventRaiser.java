@@ -37,13 +37,13 @@ public final class EventRaiser<ObservablesEventsType extends IObservablesEvents>
             final Class<?>[] methodArgsType = method.getParameterTypes();
 
             for (final IObserver<?> currentObserver : observerMerger.getAllObservers()) {
-                final Class<? extends IObservablesEvents> currentObserverObservablesEventsType =
-                    currentObserver.getObservablesEventsType();
+                final Class<? extends IObservablesEvents> currentObserverObservedEventsType =
+                    currentObserver.getObservedEventsType();
 
-                if (currentObserverObservablesEventsType.isAssignableFrom(raisableObservablesEventsType)) {
+                if (currentObserverObservedEventsType.isAssignableFrom(raisableObservablesEventsType)) {
                     try {
                         final Method methodToInvoke =
-                            currentObserverObservablesEventsType.getMethod(method.getName(), methodArgsType);
+                            currentObserverObservedEventsType.getMethod(method.getName(), methodArgsType);
                         methodToInvoke.invoke(currentObserver.process(), methodArgs);
                     } catch (final NullPointerException | SecurityException | IllegalAccessException
                             | IllegalArgumentException | InvocationTargetException | ExceptionInInitializerError e) {

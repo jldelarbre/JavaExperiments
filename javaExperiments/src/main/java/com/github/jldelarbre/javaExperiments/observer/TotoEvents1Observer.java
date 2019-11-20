@@ -25,7 +25,7 @@ public class TotoEvents1Observer implements ITotoEvents1Observer, IObservableTot
     }
 
     @Override
-    public Class<IObservableTotosEvents1> getObservablesEventsType() {
+    public Class<IObservableTotosEvents1> getObservedEventsType() {
         return IObservableTotosEvents1.class;
     }
 
