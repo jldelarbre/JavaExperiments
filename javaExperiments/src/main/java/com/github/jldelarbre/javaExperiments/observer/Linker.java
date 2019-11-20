@@ -15,10 +15,10 @@ public class Linker {
 
         toto.f();
         System.out.println();
-        toto.manageTotoEvents1Observable().disableEvents();
+        toto.manageTotoEvents1Observable().disableObservables();
         toto.f();
         System.out.println();
-        toto.manageTotoEvents1Observable().enableEvents();
+        toto.manageTotoEvents1Observable().enableObservables();
         toto.f();
     }
 }

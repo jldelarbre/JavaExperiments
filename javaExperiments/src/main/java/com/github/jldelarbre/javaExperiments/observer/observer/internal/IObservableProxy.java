@@ -1,26 +1,28 @@
 package com.github.jldelarbre.javaExperiments.observer.observer.internal;
 
+import java.util.Set;
+
 import com.github.jldelarbre.javaExperiments.observer.observer.IObservable;
 import com.github.jldelarbre.javaExperiments.observer.observer.IObservablesEvents;
 import com.github.jldelarbre.javaExperiments.observer.observer.IObserver;
 
-public interface IObservableProxy<ObserverType extends IObserver<ObservablesEventsType>, ObservablesEventsType extends IObservablesEvents>
-    extends IObservable<ObserverType, ObservablesEventsType> {
+public interface IObservableProxy<ObservablesEventsType extends IObservablesEvents>
+        extends IObservable<ObservablesEventsType> {
 
-    IObservable<ObserverType, ObservablesEventsType> getObservable();
+    IObservable<ObservablesEventsType> getObservable();
 
     @Override
-    default Class<? extends ObservablesEventsType> getObservablesEventsType() {
+    default Class<ObservablesEventsType> getObservablesEventsType() {
         return getObservable().getObservablesEventsType();
     }
 
     @Override
-    default boolean addObserver(ObserverType observer) {
+    default boolean addObserver(IObserver<ObservablesEventsType> observer) {
         return getObservable().addObserver(observer);
     }
 
     @Override
-    default boolean removeObserver(ObserverType observer) {
+    default boolean removeObserver(IObserver<ObservablesEventsType> observer) {
         return getObservable().removeObserver(observer);
     }
 
@@ -30,12 +32,22 @@ public interface IObservableProxy<ObserverType extends IObserver<ObservablesEven
     }
 
     @Override
-    default boolean disableEvents() {
-        return getObservable().disableEvents();
+    default Set<IObserver<ObservablesEventsType>> getObservers() {
+        return getObservable().getObservers();
     }
 
     @Override
-    default boolean enableEvents() {
-        return getObservable().enableEvents();
+    default int getNumObservers() {
+        return getObservable().getNumObservers();
+    }
+
+    @Override
+    default boolean disableObservables() {
+        return getObservable().disableObservables();
+    }
+
+    @Override
+    default boolean enableObservables() {
+        return getObservable().enableObservables();
     }
 }

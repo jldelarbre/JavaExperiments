@@ -1,54 +1,75 @@
-
 package com.github.jldelarbre.javaExperiments.observer.observer.internal;
+
+import java.util.HashSet;
+import java.util.Set;
 
 import com.github.jldelarbre.javaExperiments.observer.observer.IObservable;
 import com.github.jldelarbre.javaExperiments.observer.observer.IObservablesEvents;
 import com.github.jldelarbre.javaExperiments.observer.observer.IObserver;
 
-public final class Observable<ObserverType extends IObserver<ObservablesEventsType>, ObservablesEventsType extends IObservablesEvents>
-    implements IObservable<ObserverType, ObservablesEventsType> {
+public final class Observable<ObservablesEventsType extends IObservablesEvents>
+        implements IObservable<ObservablesEventsType> {
 
-    private final Class<? extends ObservablesEventsType> observablesEventsType;
-    private final IObserverHolder observerHolder;
+    private final Class<ObservablesEventsType> observablesEventsType;
+    private final Set<IObserver<ObservablesEventsType>> observers;
 
-    private Observable(Class<? extends ObservablesEventsType> observablesEventsType, IObserverHolder observerHolder) {
+    private boolean enable = true;
+
+    private Observable(Class<ObservablesEventsType> observablesEventsType) {
         this.observablesEventsType = observablesEventsType;
-        this.observerHolder = observerHolder;
+        this.observers = new HashSet<>();
     }
 
-    public static <ObserverType extends IObserver<ObservablesEventsType>, ObservablesEventsType extends IObservablesEvents>
-        Observable<ObserverType, ObservablesEventsType>
-        build(Class<? extends ObservablesEventsType> observablesEventsType, IObserverHolder observerHolder) {
-        return new Observable<>(observablesEventsType, observerHolder);
+    public static <ObservablesEventsType extends IObservablesEvents> Observable<ObservablesEventsType>
+        build(Class<ObservablesEventsType> observablesEventsType) {
+        return new Observable<>(observablesEventsType);
     }
 
     @Override
-    public Class<? extends ObservablesEventsType> getObservablesEventsType() {
+    public Class<ObservablesEventsType> getObservablesEventsType() {
         return this.observablesEventsType;
     }
 
     @Override
-    public boolean addObserver(ObserverType observer) {
-        return this.observerHolder.addObserver(observer);
+    public boolean addObserver(IObserver<ObservablesEventsType> observer) {
+        return this.observers.add(observer);
     }
 
     @Override
-    public boolean removeObserver(ObserverType observer) {
-        return this.observerHolder.removeObserver(observer);
+    public boolean removeObserver(IObserver<ObservablesEventsType> observer) {
+        return this.observers.remove(observer);
     }
 
     @Override
     public void removeAllObservers() {
-        this.observerHolder.removeAllObservers(this.getObservablesEventsType());
+        this.observers.clear();
     }
 
     @Override
-    public boolean disableEvents() {
-        return this.observerHolder.disableEvents(this.getObservablesEventsType());
+    public Set<IObserver<ObservablesEventsType>> getObservers() {
+        if (this.enable) {
+            return new HashSet<>(this.observers);
+        } else {
+            return new HashSet<>();
+        }
     }
 
     @Override
-    public boolean enableEvents() {
-        return this.observerHolder.enableEvents(this.getObservablesEventsType());
+    public int getNumObservers() {
+        return this.observers.size();
+    }
+
+    @Override
+    public boolean disableObservables() {
+        final boolean change = this.enable == true;
+        this.enable = false;
+        return change;
+    }
+
+    @Override
+    public boolean enableObservables() {
+        final boolean change = this.enable == false;
+        this.enable = true;
+        return change;
     }
 }

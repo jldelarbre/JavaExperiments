@@ -4,37 +4,43 @@ package com.github.jldelarbre.javaExperiments.observer;
 import com.github.jldelarbre.javaExperiments.observer.observer.IEventRaiser;
 import com.github.jldelarbre.javaExperiments.observer.observer.IObservable;
 import com.github.jldelarbre.javaExperiments.observer.observer.IObservableRaiserMechanic;
+import com.github.jldelarbre.javaExperiments.observer.observer.IObservablesEvents;
 import com.github.jldelarbre.javaExperiments.observer.observer.ObservableRaiserMechanic;
+import com.github.jldelarbre.javaExperiments.observer.observer.ObservableRaiserMechanic.ObservableRaiserMechanicConstruction;
 
-public class Toto
-    implements IToto, IObservableRaiserMechanic<ITotoEvents1Events2Observer, IObservableTotosEvents1Events2> {
+public class Toto implements IToto, IObservableRaiserMechanic<IObservableTotosEvents1Events2> {
 
-    private final IObservableRaiserMechanic<ITotoEvents1Events2Observer, IObservableTotosEvents1Events2> observableRaiserMechanic;
-    private final IObservableRaiserMechanic<ITotoEvents1Observer, IObservableTotosEvents1> observableRaiserMechanicTotosEvents1;
-    private final IObservableRaiserMechanic<ITotoEvents3Observer, IObservableTotosEvents3> observableRaiserMechanicTotosEvents3;
+    private final IObservableRaiserMechanic<IObservableTotosEvents1Events2> observableRaiserMechanic;
+    private final IObservableRaiserMechanic<IObservableTotosEvents1> observableRaiserMechanicTotosEvents1;
+    private final IObservableRaiserMechanic<IObservableTotosEvents3> observableRaiserMechanicTotosEvents3;
 
     private final IEventRaiser<? extends IObservableTotosEvents3> raiser3;
 
     public static IToto build() {
-        final ObservableRaiserMechanic<ITotoEvents1Events2Observer, IObservableTotosEvents1Events2> observableRaiserMechanic =
-            ObservableRaiserMechanic.build(IObservableTotosEvents1Events2.class);
+        final Class<?>[] observablesEventsTypes =
+            { IObservableTotosEvents1Events2.class, IObservableTotosEvents1.class };
+        @SuppressWarnings("unchecked")
+        final Class<? extends IObservablesEvents>[] observablesEventsTypesCast =
+            (Class<? extends IObservablesEvents>[]) observablesEventsTypes;
+        final ObservableRaiserMechanicConstruction ormc = ObservableRaiserMechanic.build(observablesEventsTypesCast);
 
-        final ObservableRaiserMechanic<ITotoEvents1Observer, IObservableTotosEvents1> observableRaiserMechanicTotosEvents1 =
-            ObservableRaiserMechanic.buildWithRaiser(IObservableTotosEvents1.class,
-                                                     observableRaiserMechanic);
+        final ObservableRaiserMechanic<IObservableTotosEvents1Events2> observableRaiserMechanic =
+            ormc.getObservableRaiserMechanic(IObservableTotosEvents1Events2.class);
 
-        final ObservableRaiserMechanic<ITotoEvents3Observer, IObservableTotosEvents3> observableRaiserMechanicTotosEvents3 =
-            ObservableRaiserMechanic
-                .build(IObservableTotosEvents3.class, observableRaiserMechanic);
+        final ObservableRaiserMechanic<IObservableTotosEvents1> observableRaiserMechanicTotosEvents1 =
+            ormc.getObservableRaiserMechanic(IObservableTotosEvents1.class);
+
+        final ObservableRaiserMechanic<IObservableTotosEvents3> observableRaiserMechanicTotosEvents3 =
+            ObservableRaiserMechanic.build(IObservableTotosEvents3.class);
 
         return new Toto(observableRaiserMechanic,
                         observableRaiserMechanicTotosEvents1,
                         observableRaiserMechanicTotosEvents3);
     }
 
-    private Toto(IObservableRaiserMechanic<ITotoEvents1Events2Observer, IObservableTotosEvents1Events2> observableRaiserMechanic,
-                 IObservableRaiserMechanic<ITotoEvents1Observer, IObservableTotosEvents1> observableRaiserMechanicTotosEvents1,
-                 IObservableRaiserMechanic<ITotoEvents3Observer, IObservableTotosEvents3> observableRaiserMechanicTotosEvents3) {
+    private Toto(IObservableRaiserMechanic<IObservableTotosEvents1Events2> observableRaiserMechanic,
+                 IObservableRaiserMechanic<IObservableTotosEvents1> observableRaiserMechanicTotosEvents1,
+                 IObservableRaiserMechanic<IObservableTotosEvents3> observableRaiserMechanicTotosEvents3) {
 
         this.observableRaiserMechanic = observableRaiserMechanic;
         this.observableRaiserMechanicTotosEvents1 = observableRaiserMechanicTotosEvents1;
@@ -47,6 +53,8 @@ public class Toto
     public void f() {
         final String someParam = "yolo";
         this.raise().eventYouplaBoom1(someParam);
+        this.raise().eventYouplaBoom1(42);
+        this.raise().eventYoupla1(77, 37);
         this.raise().eventYoupla2();
         this.raise().eventCommon();
 
@@ -55,18 +63,17 @@ public class Toto
     }
 
     @Override
-    public IObservableRaiserMechanic<ITotoEvents1Events2Observer, IObservableTotosEvents1Events2>
-        getObservableRaiserMechanic() {
+    public IObservableRaiserMechanic<IObservableTotosEvents1Events2> getObservableRaiserMechanic() {
         return this.observableRaiserMechanic;
     }
 
     @Override
-    public IObservable<ITotoEvents1Observer, IObservableTotosEvents1> manageTotoEvents1Observable() {
+    public IObservable<IObservableTotosEvents1> manageTotoEvents1Observable() {
         return this.observableRaiserMechanicTotosEvents1.getObservable();
     }
 
     @Override
-    public IObservable<ITotoEvents3Observer, IObservableTotosEvents3> manageTotoEvents3Observable() {
+    public IObservable<IObservableTotosEvents3> manageTotoEvents3Observable() {
         return this.observableRaiserMechanicTotosEvents3.getObservable();
     }
 }
