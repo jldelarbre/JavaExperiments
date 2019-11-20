@@ -1,15 +1,15 @@
+
 package com.github.jldelarbre.javaExperiments.observer.observer;
 
-import com.github.jldelarbre.javaExperiments.observer.observer.internal.IEventRaiserDefaultImpl;
-import com.github.jldelarbre.javaExperiments.observer.observer.internal.IObservableDefaultImpl;
-import com.github.jldelarbre.javaExperiments.observer.observer.internal.IObserverHolder;
+import com.github.jldelarbre.javaExperiments.observer.observer.internal.IIEventRaiserProxy;
+import com.github.jldelarbre.javaExperiments.observer.observer.internal.IObservableProxy;
 
 public interface IObservableRaiserMechanic<ObserverType extends IObserver<ObservablesEventsType>, ObservablesEventsType extends IObservablesEvents>
-        extends IObservableDefaultImpl<ObserverType, ObservablesEventsType>,
-        IEventRaiserDefaultImpl<ObservablesEventsType> {
+    extends IObservableProxy<ObserverType, ObservablesEventsType>, IIEventRaiserProxy<ObservablesEventsType> {
 
     IObservableRaiserMechanic<ObserverType, ObservablesEventsType> getObservableRaiserMechanic();
 
+    @Override
     default IObservable<ObserverType, ObservablesEventsType> getObservable() {
         return getObservableRaiserMechanic().getObservable();
     }
@@ -17,15 +17,5 @@ public interface IObservableRaiserMechanic<ObserverType extends IObserver<Observ
     @Override
     default IEventRaiser<? extends ObservablesEventsType> getRaiser() {
         return getObservableRaiserMechanic().getRaiser();
-    }
-
-    @Override
-    default IObserverHolder getObserverHolder() {
-        return getObservableRaiserMechanic().getObserverHolder();
-    }
-
-    @Override
-    default Class<? extends ObserverType> getObserverType() {
-        return getObservableRaiserMechanic().getObserverType();
     }
 }

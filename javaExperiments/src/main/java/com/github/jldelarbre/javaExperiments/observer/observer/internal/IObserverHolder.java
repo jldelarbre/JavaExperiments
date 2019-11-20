@@ -1,3 +1,4 @@
+
 package com.github.jldelarbre.javaExperiments.observer.observer.internal;
 
 import java.util.Collection;
@@ -8,19 +9,19 @@ import com.github.jldelarbre.javaExperiments.observer.observer.IObserver;
 public interface IObserverHolder {
 
     <ObserverType extends IObserver<ObservablesEventsType>, ObservablesEventsType extends IObservablesEvents> boolean
-        addObserver(Class<? extends ObserverType> observerType, ObserverType observer);
+        addObserver(ObserverType observer);
 
     <ObserverType extends IObserver<ObservablesEventsType>, ObservablesEventsType extends IObservablesEvents> boolean
-        removeObserver(Class<? extends ObserverType> observerType, ObserverType observer);
+        removeObserver(ObserverType observer);
 
     <ObserverType extends IObserver<ObservablesEventsType>, ObservablesEventsType extends IObservablesEvents> void
-        removeAllObservers(Class<? extends ObserverType> observerType);
+        removeAllObservers(Class<? extends ObservablesEventsType> observerType);
 
     Collection<? extends IObserver<?>> getAllObservers();
 
     <ObserverType extends IObserver<ObservablesEventsType>, ObservablesEventsType extends IObservablesEvents> boolean
-        disableObservers(Class<? extends ObserverType> observerType);
+        disableEvents(Class<? extends ObservablesEventsType> observerType);
 
     <ObserverType extends IObserver<ObservablesEventsType>, ObservablesEventsType extends IObservablesEvents> boolean
-        enableObservers(Class<? extends ObserverType> observerType);
+        enableEvents(Class<? extends ObservablesEventsType> observerType);
 }

@@ -1,3 +1,4 @@
+
 package com.github.jldelarbre.javaExperiments.observer.observer.internal;
 
 import java.util.Collection;
@@ -11,11 +12,11 @@ import com.github.jldelarbre.javaExperiments.observer.observer.IObserver;
 
 public final class ObserverHolder implements IObserverHolder {
 
-    private final Map<Class<? extends IObserver<?>>, Set<? extends IObserver<?>>> observerType2ObserverSet;
-    private final Map<Class<? extends IObserver<?>>, Set<? extends IObserver<?>>> disableObserverSet;
+    private final Map<Class<? extends IObservablesEvents>, Set<? extends IObserver<?>>> eventType2ObserverSet;
+    private final Map<Class<? extends IObservablesEvents>, Set<? extends IObserver<?>>> disableObserverSet;
 
     private ObserverHolder() {
-        this.observerType2ObserverSet = new HashMap<>();
+        this.eventType2ObserverSet = new HashMap<>();
         this.disableObserverSet = new HashMap<>();
     }
 
@@ -25,33 +26,33 @@ public final class ObserverHolder implements IObserverHolder {
 
     @Override
     public <ObserverType extends IObserver<ObservablesEventsType>, ObservablesEventsType extends IObservablesEvents>
-        boolean addObserver(Class<? extends ObserverType> observerType, ObserverType observer) {
-        final Collection<ObserverType> observers = this.getObservers(observerType);
+        boolean addObserver(ObserverType observer) {
+        final Collection<ObserverType> observers = this.getObservers(observer.getObservablesEventsType());
         return observers.add(observer);
     }
 
     @Override
     public <ObserverType extends IObserver<ObservablesEventsType>, ObservablesEventsType extends IObservablesEvents>
-        boolean removeObserver(Class<? extends ObserverType> observerType, ObserverType observer) {
-        final Collection<ObserverType> observers = this.getObservers(observerType);
+        boolean removeObserver(ObserverType observer) {
+        final Collection<ObserverType> observers = this.getObservers(observer.getObservablesEventsType());
         return observers.remove(observer);
     }
 
     @Override
     public <ObserverType extends IObserver<ObservablesEventsType>, ObservablesEventsType extends IObservablesEvents>
-        void removeAllObservers(Class<? extends ObserverType> observerType) {
-        final Collection<ObserverType> observers = this.getObservers(observerType);
+        void removeAllObservers(Class<? extends ObservablesEventsType> eventType) {
+        final Collection<ObserverType> observers = this.getObservers(eventType);
         observers.clear();
     }
 
     @Override
     public <ObserverType extends IObserver<ObservablesEventsType>, ObservablesEventsType extends IObservablesEvents>
-        boolean disableObservers(Class<? extends ObserverType> observerType) {
+        boolean disableEvents(Class<? extends ObservablesEventsType> eventType) {
 
-        this.createIfNecessary(observerType);
-        if (this.observerType2ObserverSet.containsKey(observerType)) {
-            this.disableObserverSet.put(observerType, this.observerType2ObserverSet.get(observerType));
-            this.observerType2ObserverSet.remove(observerType);
+        this.createIfNecessary(eventType);
+        if (this.eventType2ObserverSet.containsKey(eventType)) {
+            this.disableObserverSet.put(eventType, this.eventType2ObserverSet.get(eventType));
+            this.eventType2ObserverSet.remove(eventType);
             return true;
         }
         return false;
@@ -59,11 +60,11 @@ public final class ObserverHolder implements IObserverHolder {
 
     @Override
     public <ObserverType extends IObserver<ObservablesEventsType>, ObservablesEventsType extends IObservablesEvents>
-        boolean enableObservers(Class<? extends ObserverType> observerType) {
+        boolean enableEvents(Class<? extends ObservablesEventsType> eventType) {
 
-        if (this.disableObserverSet.containsKey(observerType)) {
-            this.observerType2ObserverSet.put(observerType, this.disableObserverSet.get(observerType));
-            this.disableObserverSet.remove(observerType);
+        if (this.disableObserverSet.containsKey(eventType)) {
+            this.eventType2ObserverSet.put(eventType, this.disableObserverSet.get(eventType));
+            this.disableObserverSet.remove(eventType);
             return true;
         }
         return false;
@@ -72,7 +73,7 @@ public final class ObserverHolder implements IObserverHolder {
     @Override
     public Collection<? extends IObserver<?>> getAllObservers() {
         final Set<? extends IObserver<?>> observers =
-            this.observerType2ObserverSet.values().stream().reduce(new HashSet<>(), ObserverHolder::accumulate);
+            this.eventType2ObserverSet.values().stream().reduce(new HashSet<>(), ObserverHolder::accumulate);
 
         return observers;
     }
@@ -80,7 +81,7 @@ public final class ObserverHolder implements IObserverHolder {
     private static Set<? extends IObserver<?>> accumulate(Set<? extends IObserver<?>> globalSet,
                                                           Set<? extends IObserver<?>> typedObservers) {
 
-        @SuppressWarnings({ "rawtypes", "unchecked" })
+        @SuppressWarnings({"rawtypes", "unchecked"})
         final GenericGlue<?> genericGlue = new GenericGlue(globalSet, typedObservers);
         genericGlue.add();
         return globalSet;
@@ -104,27 +105,27 @@ public final class ObserverHolder implements IObserverHolder {
 
     @SuppressWarnings("unchecked")
     private <ObserverType extends IObserver<ObservablesEventsType>, ObservablesEventsType extends IObservablesEvents>
-        Collection<ObserverType> getObservers(Class<? extends ObserverType> observerType) {
+        Collection<ObserverType> getObservers(Class<? extends ObservablesEventsType> eventType) {
 
-        this.createIfNecessary(observerType);
+        this.createIfNecessary(eventType);
 
         Collection<ObserverType> observers = null;
-        if (this.observerType2ObserverSet.containsKey(observerType)) {
-            observers = (Collection<ObserverType>) this.observerType2ObserverSet.get(observerType);
-        } else if (this.disableObserverSet.containsKey(observerType)) {
-            observers = (Collection<ObserverType>) this.disableObserverSet.get(observerType);
+        if (this.eventType2ObserverSet.containsKey(eventType)) {
+            observers = (Collection<ObserverType>) this.eventType2ObserverSet.get(eventType);
+        } else if (this.disableObserverSet.containsKey(eventType)) {
+            observers = (Collection<ObserverType>) this.disableObserverSet.get(eventType);
         }
         return observers;
     }
 
     private <ObserverType extends IObserver<ObservablesEventsType>, ObservablesEventsType extends IObservablesEvents>
-        void createIfNecessary(Class<? extends ObserverType> observerType) {
+        void createIfNecessary(Class<? extends ObservablesEventsType> eventType) {
 
-        final boolean doNotExistInEnableSet = !this.observerType2ObserverSet.containsKey(observerType);
+        final boolean doNotExistInEnableSet = !this.eventType2ObserverSet.containsKey(eventType);
         if (doNotExistInEnableSet) {
-            final boolean doNotExistInDisableSet = !this.disableObserverSet.containsKey(observerType);
+            final boolean doNotExistInDisableSet = !this.disableObserverSet.containsKey(eventType);
             if (doNotExistInDisableSet) {
-                this.observerType2ObserverSet.put(observerType, new HashSet<>());
+                this.eventType2ObserverSet.put(eventType, new HashSet<>());
             }
         }
     }

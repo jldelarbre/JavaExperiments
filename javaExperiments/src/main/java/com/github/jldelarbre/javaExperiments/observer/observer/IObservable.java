@@ -1,10 +1,11 @@
+
 package com.github.jldelarbre.javaExperiments.observer.observer;
 
 public interface IObservable<ObserverType extends IObserver<ObservablesEventsType>, ObservablesEventsType extends IObservablesEvents> {
 
     // addObserver with priority
 
-    Class<? extends ObserverType> getObserverType();
+    Class<? extends ObservablesEventsType> getObservablesEventsType();
 
     boolean addObserver(ObserverType observer);
 
@@ -12,7 +13,7 @@ public interface IObservable<ObserverType extends IObserver<ObservablesEventsTyp
 
     void removeAllObservers();
 
-    boolean disableObservers();
+    boolean disableEvents();
 
-    boolean enableObservers();
+    boolean enableEvents();
 }

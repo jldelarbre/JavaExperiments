@@ -1,3 +1,4 @@
+
 package com.github.jldelarbre.javaExperiments.observer.observer;
 
 public interface IObserver<ObservablesEventsType extends IObservablesEvents> {
