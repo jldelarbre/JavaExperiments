@@ -11,7 +11,7 @@ public final class Observable<ObservablesEventsType extends IObservablesEvents>
         implements IObservable<ObservablesEventsType> {
 
     private final Class<ObservablesEventsType> observablesEventsType;
-    private final Set<IObserver<ObservablesEventsType>> observers;
+    private final Set<IObserver<? extends ObservablesEventsType>> observers;
 
     private boolean enable = true;
 
@@ -31,12 +31,12 @@ public final class Observable<ObservablesEventsType extends IObservablesEvents>
     }
 
     @Override
-    public boolean addObserver(IObserver<ObservablesEventsType> observer) {
+    public boolean addObserver(IObserver<? extends ObservablesEventsType> observer) {
         return this.observers.add(observer);
     }
 
     @Override
-    public boolean removeObserver(IObserver<ObservablesEventsType> observer) {
+    public boolean removeObserver(IObserver<? extends ObservablesEventsType> observer) {
         return this.observers.remove(observer);
     }
 
@@ -46,7 +46,7 @@ public final class Observable<ObservablesEventsType extends IObservablesEvents>
     }
 
     @Override
-    public Set<IObserver<ObservablesEventsType>> getObservers() {
+    public Set<IObserver<? extends ObservablesEventsType>> getObservers() {
         if (this.enable) {
             return new HashSet<>(this.observers);
         } else {

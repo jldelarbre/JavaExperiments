@@ -8,13 +8,13 @@ public interface IObservable<ObservablesEventsType extends IObservablesEvents> {
 
     Class<ObservablesEventsType> getObservablesEventsType();
 
-    boolean addObserver(IObserver<ObservablesEventsType> observer);
+    boolean addObserver(IObserver<? extends ObservablesEventsType> observer);
 
-    boolean removeObserver(IObserver<ObservablesEventsType> observer);
+    boolean removeObserver(IObserver<? extends ObservablesEventsType> observer);
 
     void removeAllObservers();
 
-    Set<IObserver<ObservablesEventsType>> getObservers();
+    Set<IObserver<? extends ObservablesEventsType>> getObservers();
 
     int getNumObservers();
 
@@ -33,12 +33,12 @@ public interface IObservable<ObservablesEventsType extends IObservablesEvents> {
         }
 
         @Override
-        default boolean addObserver(IObserver<ObservablesEventsType> observer) {
+        default boolean addObserver(IObserver<? extends ObservablesEventsType> observer) {
             return getObservable().addObserver(observer);
         }
 
         @Override
-        default boolean removeObserver(IObserver<ObservablesEventsType> observer) {
+        default boolean removeObserver(IObserver<? extends ObservablesEventsType> observer) {
             return getObservable().removeObserver(observer);
         }
 
@@ -48,7 +48,7 @@ public interface IObservable<ObservablesEventsType extends IObservablesEvents> {
         }
 
         @Override
-        default Set<IObserver<ObservablesEventsType>> getObservers() {
+        default Set<IObserver<? extends ObservablesEventsType>> getObservers() {
             return getObservable().getObservers();
         }
 
