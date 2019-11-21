@@ -1,15 +1,16 @@
 package com.github.jldelarbre.javaExperiments.observer.observer;
 
-public interface IObservableRaiserMechanic<ObservablesEventsType extends IObservablesEvents>
-        extends IObservable<ObservablesEventsType>, IEventRaiser<ObservablesEventsType> {
+public interface IObservableRaiserMechanic<ObservablesEventsType extends IObservablesEvents, ObserverType extends IObserver<? extends ObservablesEventsType>>
+        extends IObservable<ObservablesEventsType, ObserverType>, IEventRaiser<ObservablesEventsType> {
 
-    interface IProxy<ObservablesEventsType extends IObservablesEvents> extends IObservableRaiserMechanic<ObservablesEventsType>,
-        IObservable.IProxy<ObservablesEventsType>, IEventRaiser.IProxy<ObservablesEventsType> {
+    interface IProxy<ObservablesEventsType extends IObservablesEvents, ObserverType extends IObserver<? extends ObservablesEventsType>>
+        extends IObservableRaiserMechanic<ObservablesEventsType, ObserverType>,
+        IObservable.IProxy<ObservablesEventsType, ObserverType>, IEventRaiser.IProxy<ObservablesEventsType> {
         
-        IObservableRaiserMechanic<ObservablesEventsType> getObservableRaiserMechanic();
+        IObservableRaiserMechanic<ObservablesEventsType, ObserverType> getObservableRaiserMechanic();
         
         @Override
-        default IObservable<ObservablesEventsType> getObservable() {
+        default IObservable<ObservablesEventsType, ObserverType> getObservable() {
             return getObservableRaiserMechanic();
         }
         

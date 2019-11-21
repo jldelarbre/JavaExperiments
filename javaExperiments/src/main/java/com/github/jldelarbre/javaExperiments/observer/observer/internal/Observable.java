@@ -7,11 +7,11 @@ import com.github.jldelarbre.javaExperiments.observer.observer.IObservable;
 import com.github.jldelarbre.javaExperiments.observer.observer.IObservablesEvents;
 import com.github.jldelarbre.javaExperiments.observer.observer.IObserver;
 
-public final class Observable<ObservablesEventsType extends IObservablesEvents>
-        implements IObservable<ObservablesEventsType> {
+public final class Observable<ObservablesEventsType extends IObservablesEvents, ObserverType extends IObserver<? extends ObservablesEventsType>>
+        implements IObservable<ObservablesEventsType, ObserverType> {
 
     private final Class<ObservablesEventsType> observablesEventsType;
-    private final Set<IObserver<? extends ObservablesEventsType>> observers;
+    private final Set<ObserverType> observers;
 
     private boolean enable = true;
 
@@ -20,8 +20,10 @@ public final class Observable<ObservablesEventsType extends IObservablesEvents>
         this.observers = new HashSet<>();
     }
 
-    public static <ObservablesEventsType extends IObservablesEvents> Observable<ObservablesEventsType>
+    public static <ObservablesEventsType extends IObservablesEvents, ObserverType extends IObserver<? extends ObservablesEventsType>>
+        Observable<ObservablesEventsType, ObserverType>
         build(Class<ObservablesEventsType> observablesEventsType) {
+        
         return new Observable<>(observablesEventsType);
     }
 
@@ -31,12 +33,12 @@ public final class Observable<ObservablesEventsType extends IObservablesEvents>
     }
 
     @Override
-    public boolean addObserver(IObserver<? extends ObservablesEventsType> observer) {
+    public boolean addObserver(ObserverType observer) {
         return this.observers.add(observer);
     }
 
     @Override
-    public boolean removeObserver(IObserver<? extends ObservablesEventsType> observer) {
+    public boolean removeObserver(ObserverType observer) {
         return this.observers.remove(observer);
     }
 
@@ -46,7 +48,7 @@ public final class Observable<ObservablesEventsType extends IObservablesEvents>
     }
 
     @Override
-    public Set<IObserver<? extends ObservablesEventsType>> getObservers() {
+    public Set<ObserverType> getObservers() {
         if (this.enable) {
             return new HashSet<>(this.observers);
         } else {

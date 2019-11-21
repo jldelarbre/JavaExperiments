@@ -2,19 +2,19 @@ package com.github.jldelarbre.javaExperiments.observer.observer;
 
 import java.util.Set;
 
-public interface IObservable<ObservablesEventsType extends IObservablesEvents> {
+public interface IObservable<ObservablesEventsType extends IObservablesEvents, ObserverType extends IObserver<? extends ObservablesEventsType>> {
 
     // addObserver with priority
 
     Class<ObservablesEventsType> getObservablesEventsType();
 
-    boolean addObserver(IObserver<? extends ObservablesEventsType> observer);
+    boolean addObserver(ObserverType observer);
 
-    boolean removeObserver(IObserver<? extends ObservablesEventsType> observer);
+    boolean removeObserver(ObserverType observer);
 
     void removeAllObservers();
 
-    Set<IObserver<? extends ObservablesEventsType>> getObservers();
+    Set<ObserverType> getObservers();
 
     int getNumObservers();
 
@@ -22,10 +22,10 @@ public interface IObservable<ObservablesEventsType extends IObservablesEvents> {
 
     boolean enable();
 
-    interface IProxy<ObservablesEventsType extends IObservablesEvents>
-            extends IObservable<ObservablesEventsType> {
+    interface IProxy<ObservablesEventsType extends IObservablesEvents, ObserverType extends IObserver<? extends ObservablesEventsType>>
+            extends IObservable<ObservablesEventsType, ObserverType> {
 
-        IObservable<ObservablesEventsType> getObservable();
+        IObservable<ObservablesEventsType, ObserverType> getObservable();
 
         @Override
         default Class<ObservablesEventsType> getObservablesEventsType() {
@@ -33,12 +33,12 @@ public interface IObservable<ObservablesEventsType extends IObservablesEvents> {
         }
 
         @Override
-        default boolean addObserver(IObserver<? extends ObservablesEventsType> observer) {
+        default boolean addObserver(ObserverType observer) {
             return getObservable().addObserver(observer);
         }
 
         @Override
-        default boolean removeObserver(IObserver<? extends ObservablesEventsType> observer) {
+        default boolean removeObserver(ObserverType observer) {
             return getObservable().removeObserver(observer);
         }
 
@@ -48,7 +48,7 @@ public interface IObservable<ObservablesEventsType extends IObservablesEvents> {
         }
 
         @Override
-        default Set<IObserver<? extends ObservablesEventsType>> getObservers() {
+        default Set<ObserverType> getObservers() {
             return getObservable().getObservers();
         }
 
