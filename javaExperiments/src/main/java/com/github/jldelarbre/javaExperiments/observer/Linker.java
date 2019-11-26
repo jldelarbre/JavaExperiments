@@ -10,7 +10,7 @@ public class Linker {
 
         final IToto toto = Toto.build();
         toto.manageTotoEvents1Observable().addObserver(observer1);
-        //toto.manageTotoEvents1Observable().addObserver(observer1_2);
+        toto.manageTotoEvents1Observable().addObserver(observer1_2);
         toto.addObserver(observer1_2);
         toto.manageTotoEvents3Observable().addObserver(observer3);
 
