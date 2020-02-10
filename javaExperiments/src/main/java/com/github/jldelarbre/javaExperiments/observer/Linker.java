@@ -22,4 +22,34 @@ public class Linker {
         toto.manageTotoEvents1Observable().enable();
         toto.f();
     }
+    
+    // Expected output:
+    
+//    TotoEvents1Observer.eventYouplaBoom1(yolo)
+//    TotoEvents1Events2Observer.eventYouplaBoom1(yolo)
+//    TotoEvents1Events2Observer.InnerObserverImpl.eventYouplaBoom1(42)
+//    TotoEvents1Events2Observer.InnerObserverImpl.eventYoupla1(77, 37)
+//    TotoEvents1Events2Observer.eventYoupla2()
+//    TotoEvents1Observer.eventCommon()
+//    TotoEvents1Events2Observer.eventCommon()
+//    TotoEvents3Observer.eventAa3()
+//    TotoEvents3Observer.eventCommon()
+//
+//    TotoEvents1Events2Observer.eventYouplaBoom1(yolo)
+//    TotoEvents1Events2Observer.InnerObserverImpl.eventYouplaBoom1(42)
+//    TotoEvents1Events2Observer.InnerObserverImpl.eventYoupla1(77, 37)
+//    TotoEvents1Events2Observer.eventYoupla2()
+//    TotoEvents1Events2Observer.eventCommon()
+//    TotoEvents3Observer.eventAa3()
+//    TotoEvents3Observer.eventCommon()
+//
+//    TotoEvents1Observer.eventYouplaBoom1(yolo)
+//    TotoEvents1Events2Observer.eventYouplaBoom1(yolo)
+//    TotoEvents1Events2Observer.InnerObserverImpl.eventYouplaBoom1(42)
+//    TotoEvents1Events2Observer.InnerObserverImpl.eventYoupla1(77, 37)
+//    TotoEvents1Events2Observer.eventYoupla2()
+//    TotoEvents1Observer.eventCommon()
+//    TotoEvents1Events2Observer.eventCommon()
+//    TotoEvents3Observer.eventAa3()
+//    TotoEvents3Observer.eventCommon()
 }
