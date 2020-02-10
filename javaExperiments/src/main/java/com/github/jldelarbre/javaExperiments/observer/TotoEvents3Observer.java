@@ -1,6 +1,6 @@
 package com.github.jldelarbre.javaExperiments.observer;
 
-public class TotoEvents3Observer implements ITotoEvents3Observer, IObservableTotosEvents3 {
+public class TotoEvents3Observer implements ITotoEvents3Observer, ITotosEvents3 {
 
     @Override
     public void eventCommon() {
@@ -13,12 +13,12 @@ public class TotoEvents3Observer implements ITotoEvents3Observer, IObservableTot
     }
 
     @Override
-    public IObservableTotosEvents3 process() {
+    public ITotosEvents3 process() {
         return this;
     }
 
     @Override
-    public Class<IObservableTotosEvents3> getObservedEventsType() {
-        return IObservableTotosEvents3.class;
+    public Class<ITotosEvents3> getObservedEventsType() {
+        return ITotosEvents3.class;
     }
 }

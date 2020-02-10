@@ -7,22 +7,22 @@ import java.util.Map;
 import java.util.Set;
 
 import com.github.jldelarbre.javaExperiments.observer.observer.IObservable;
-import com.github.jldelarbre.javaExperiments.observer.observer.IObservablesEvents;
+import com.github.jldelarbre.javaExperiments.observer.observer.IEvents;
 import com.github.jldelarbre.javaExperiments.observer.observer.IObserver;
 
 public final class ObserverMerger implements IObserverMerger {
 
     // pair observable + event
-    private final Map<Class<? extends IObservablesEvents>, IObservable<?, ?>> observablesMap;
+    private final Map<Class<? extends IEvents>, IObservable<?, ?>> observablesMap;
 
-    private ObserverMerger(Map<Class<? extends IObservablesEvents>, IObservable<?, ?>> observablesMap) {
+    private ObserverMerger(Map<Class<? extends IEvents>, IObservable<?, ?>> observablesMap) {
         this.observablesMap = observablesMap;
     }
 
     public static ObserverMerger build(Set<? extends IObservable<?, ?>> observables) {
-        final Map<Class<? extends IObservablesEvents>, IObservable<?, ?>> observablesMap = new HashMap<>();
+        final Map<Class<? extends IEvents>, IObservable<?, ?>> observablesMap = new HashMap<>();
         observables.forEach(observable -> {
-            final Class<? extends IObservablesEvents> observableClass = observable.getObservablesEventsType();
+            final Class<? extends IEvents> observableClass = observable.getObservableEventsType();
 
             observablesMap.put(observableClass, observable);
         });

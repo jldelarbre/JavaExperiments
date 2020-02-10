@@ -1,8 +1,8 @@
 package com.github.jldelarbre.javaExperiments.observer;
 
-import com.github.jldelarbre.javaExperiments.observer.observer.IObservablesEvents;
+import com.github.jldelarbre.javaExperiments.observer.observer.IEvents;
 
-public interface IObservableTotosEvents1 extends IObservablesEvents {
+public interface ITotosEvents1 extends IEvents {
 
     void eventCommon();
 

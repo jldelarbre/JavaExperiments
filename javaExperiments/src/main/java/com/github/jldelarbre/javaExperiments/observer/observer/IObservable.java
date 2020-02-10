@@ -2,11 +2,11 @@ package com.github.jldelarbre.javaExperiments.observer.observer;
 
 import java.util.Set;
 
-public interface IObservable<ObservablesEventsType extends IObservablesEvents, ObserverType extends IObserver<? extends ObservablesEventsType>> {
+public interface IObservable<EventsType extends IEvents, ObserverType extends IObserver<? extends EventsType>> {
 
     // addObserver with priority
 
-    Class<ObservablesEventsType> getObservablesEventsType();
+    Class<EventsType> getObservableEventsType();
 
     boolean addObserver(ObserverType observer);
 
@@ -22,14 +22,14 @@ public interface IObservable<ObservablesEventsType extends IObservablesEvents, O
 
     boolean enable();
 
-    interface IProxy<ObservablesEventsType extends IObservablesEvents, ObserverType extends IObserver<? extends ObservablesEventsType>>
-            extends IObservable<ObservablesEventsType, ObserverType> {
+    interface IProxy<EventsType extends IEvents, ObserverType extends IObserver<? extends EventsType>>
+            extends IObservable<EventsType, ObserverType> {
 
-        IObservable<ObservablesEventsType, ObserverType> getObservable();
+        IObservable<EventsType, ObserverType> getObservable();
 
         @Override
-        default Class<ObservablesEventsType> getObservablesEventsType() {
-            return getObservable().getObservablesEventsType();
+        default Class<EventsType> getObservableEventsType() {
+            return getObservable().getObservableEventsType();
         }
 
         @Override

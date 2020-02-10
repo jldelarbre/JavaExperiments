@@ -1,6 +1,6 @@
 package com.github.jldelarbre.javaExperiments.observer;
 
-public class TotoEvents1Observer implements ITotoEvents1Observer, IObservableTotosEvents1 {
+public class TotoEvents1Observer implements ITotoEvents1Observer, ITotosEvents1 {
 
     private final String observerDescription = "observer event 1";
 
@@ -20,13 +20,13 @@ public class TotoEvents1Observer implements ITotoEvents1Observer, IObservableTot
     }
 
     @Override
-    public IObservableTotosEvents1 process() {
+    public ITotosEvents1 process() {
         return this;
     }
 
     @Override
-    public Class<IObservableTotosEvents1> getObservedEventsType() {
-        return IObservableTotosEvents1.class;
+    public Class<ITotosEvents1> getObservedEventsType() {
+        return ITotosEvents1.class;
     }
 
     @Override

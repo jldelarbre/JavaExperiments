@@ -10,91 +10,89 @@ import com.github.jldelarbre.javaExperiments.observer.observer.internal.IObserve
 import com.github.jldelarbre.javaExperiments.observer.observer.internal.Observable;
 import com.github.jldelarbre.javaExperiments.observer.observer.internal.ObserverMerger;
 
-public final class ObservableRaiserMechanic<ObservablesEventsType extends IObservablesEvents, ObserverType extends IObserver<? extends ObservablesEventsType>>
-        implements IObservableRaiserMechanic<ObservablesEventsType, ObserverType>,
-        IObservable.IProxy<ObservablesEventsType, ObserverType>, IEventRaiser.IProxy<ObservablesEventsType> {
+public final class ObservableRaiserMechanic<EventsType extends IEvents, ObserverType extends IObserver<? extends EventsType>>
+        implements IObservableRaiserMechanic<EventsType, ObserverType>,
+                   IObservable.IProxy<EventsType, ObserverType>, IEventRaiser.IProxy<EventsType> {
 
-    private final IEventRaiser<ObservablesEventsType> raiser;
+    private final IEventRaiser<EventsType> raiser;
 
-    private final IObservable<ObservablesEventsType, ObserverType> observable;
+    private final IObservable<EventsType, ObserverType> observable;
 
-    private ObservableRaiserMechanic(IEventRaiser<ObservablesEventsType> raiser,
-                                     IObservable<ObservablesEventsType, ObserverType> observable) {
+    private ObservableRaiserMechanic(IEventRaiser<EventsType> raiser,
+                                     IObservable<EventsType, ObserverType> observable) {
         this.raiser = raiser;
         this.observable = observable;
     }
 
     public static final class ObservableRaiserMechanicConstruction {
-        private final Map<Class<? extends IObservablesEvents>, ObservableRaiserMechanic<?, ?>> observableRaiserMechanicMap;
+        private final Map<Class<? extends IEvents>, ObservableRaiserMechanic<?, ?>> observableRaiserMechanicMap;
 
-        private ObservableRaiserMechanicConstruction(Map<Class<? extends IObservablesEvents>, ObservableRaiserMechanic<?, ?>> observableRaiserMechanicMap) {
+        private ObservableRaiserMechanicConstruction(Map<Class<? extends IEvents>, ObservableRaiserMechanic<?, ?>> observableRaiserMechanicMap) {
             this.observableRaiserMechanicMap = observableRaiserMechanicMap;
         }
 
-        public <ObservablesEventsType extends IObservablesEvents, ObserverType extends IObserver<? extends ObservablesEventsType>>
-            ObservableRaiserMechanic<ObservablesEventsType, ObserverType>
-            getObservableRaiserMechanic(Class<ObservablesEventsType> observableEventType) {
+        public <EventsType extends IEvents, ObserverType extends IObserver<? extends EventsType>>
+            ObservableRaiserMechanic<EventsType, ObserverType>
+            getObservableRaiserMechanic(Class<EventsType> eventType) {
             
             @SuppressWarnings("unchecked")
-            final ObservableRaiserMechanic<ObservablesEventsType, ObserverType> observableRaiserMechanic =
-                (ObservableRaiserMechanic<ObservablesEventsType, ObserverType>) this.observableRaiserMechanicMap
-                        .get(observableEventType);
+            final ObservableRaiserMechanic<EventsType, ObserverType> observableRaiserMechanic =
+                (ObservableRaiserMechanic<EventsType, ObserverType>) this.observableRaiserMechanicMap
+                        .get(eventType);
             return observableRaiserMechanic;
         }
     }
 
-    public static <ObservablesEventsType extends IObservablesEvents, ObserverType extends IObserver<? extends ObservablesEventsType>>
-        ObservableRaiserMechanic<ObservablesEventsType, ObserverType>
-        build(Class<ObservablesEventsType> observablesEventsType) {
+    public static <EventsType extends IEvents, ObserverType extends IObserver<? extends EventsType>>
+        ObservableRaiserMechanic<EventsType, ObserverType> build(Class<EventsType> eventsType) {
 
-        final Observable<ObservablesEventsType, ObserverType> observable = Observable.build(observablesEventsType);
+        final Observable<EventsType, ObserverType> observable = Observable.build(eventsType);
 
-        final Set<IObservable<ObservablesEventsType, ObserverType>> observables = new HashSet<>();
+        final Set<IObservable<EventsType, ObserverType>> observables = new HashSet<>();
         observables.add(observable);
 
         final IObserverMerger observerMerger = ObserverMerger.build(observables);
 
-        final IEventRaiser<ObservablesEventsType> raiser = EventRaiser.build(observablesEventsType, observerMerger);
+        final IEventRaiser<EventsType> raiser = EventRaiser.build(eventsType, observerMerger);
 
         return new ObservableRaiserMechanic<>(raiser, observable);
     }
 
-    public static ObservableRaiserMechanicConstruction
-        build(Class<? extends IObservablesEvents>[] observablesEventsTypes) {
+    public static ObservableRaiserMechanicConstruction build(Class<? extends IEvents>[] eventsTypes) {
 
-        final Map<Class<? extends IObservablesEvents>, ObservableRaiserMechanic<?, ?>> observableRaiserMechanicMap =
+        final Map<Class<? extends IEvents>, ObservableRaiserMechanic<?, ?>> observableRaiserMechanicMap =
             new HashMap<>();
         final Set<IObservable<?, ?>> observables = new HashSet<>();
-        final Map<Class<? extends IObservablesEvents>, IObservable<?, ?>> observablesMap =
+        final Map<Class<? extends IEvents>, IObservable<?, ?>> observablesMap =
             new HashMap<>();
 
-        for (final Class<? extends IObservablesEvents> observablesEventsType : observablesEventsTypes) {
-            final Observable<?, ?> observable = Observable.build(observablesEventsType);
+        for (final Class<? extends IEvents> eventsType : eventsTypes) {
+            final Observable<?, ?> observable = Observable.build(eventsType);
             observables.add(observable);
-            observablesMap.put(observablesEventsType, observable);
+            observablesMap.put(eventsType, observable);
         }
 
         final IObserverMerger observerMerger = ObserverMerger.build(observables);
 
-        for (final Class<? extends IObservablesEvents> observablesEventsType : observablesEventsTypes) {
-            final IEventRaiser<? extends IObservablesEvents> raiser =
-                EventRaiser.build(observablesEventsType, observerMerger);
-            final IObservable<?, ?> observableTmp = observablesMap.get(observablesEventsType);
+        for (final Class<? extends IEvents> eventsType : eventsTypes) {
+            final IEventRaiser<? extends IEvents> raiser =
+                EventRaiser.build(eventsType, observerMerger);
+            final IObservable<?, ?> observableTmp = observablesMap.get(eventsType);
             @SuppressWarnings({ "rawtypes", "unchecked" })
             final ObservableRaiserMechanic<?, ?> orm = new ObservableRaiserMechanic(raiser, observableTmp);
-            observableRaiserMechanicMap.put(observablesEventsType, orm);
+            observableRaiserMechanicMap.put(eventsType, orm);
         }
 
         return new ObservableRaiserMechanicConstruction(observableRaiserMechanicMap);
     }
 
     @Override
-    public IEventRaiser<ObservablesEventsType> getRaiser() {
+    public IEventRaiser<EventsType> getRaiser() {
         return this.raiser;
     }
 
     @Override
-    public IObservable<ObservablesEventsType, ObserverType> getObservable() {
+    public IObservable<EventsType, ObserverType> getObservable() {
         return this.observable;
     }
 }

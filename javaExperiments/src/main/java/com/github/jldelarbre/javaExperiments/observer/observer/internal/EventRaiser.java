@@ -8,32 +8,31 @@ import java.util.Arrays;
 import java.util.stream.Stream;
 
 import com.github.jldelarbre.javaExperiments.observer.observer.IEventRaiser;
-import com.github.jldelarbre.javaExperiments.observer.observer.IObservablesEvents;
+import com.github.jldelarbre.javaExperiments.observer.observer.IEvents;
 import com.github.jldelarbre.javaExperiments.observer.observer.IObserver;
 
-public final class EventRaiser<ObservablesEventsType extends IObservablesEvents>
-        implements IEventRaiser<ObservablesEventsType> {
+public final class EventRaiser<EventsType extends IEvents> implements IEventRaiser<EventsType> {
 
-    private final ObservablesEventsType observablesEventsType;
+    private final EventsType events;
 
-    private EventRaiser(ObservablesEventsType observablesEventsType) {
-        this.observablesEventsType = observablesEventsType;
+    private EventRaiser(EventsType events) {
+        this.events = events;
     }
 
-    public static <ObservablesEventsType extends IObservablesEvents> EventRaiser<ObservablesEventsType>
-        build(Class<ObservablesEventsType> raisableObservablesEventsType, IObserverMerger observerMerger) {
+    public static <EventsType extends IEvents>
+        EventRaiser<EventsType> build(Class<EventsType> eventsType, IObserverMerger observerMerger) {
 
-        final ObservablesEventsType observablesEventsType = buildRaiser(raisableObservablesEventsType, observerMerger);
-        return new EventRaiser<>(observablesEventsType);
+        final EventsType events = buildRaiser(eventsType, observerMerger);
+        return new EventRaiser<>(events);
     }
 
     @Override
-    public ObservablesEventsType raise() {
-        return this.observablesEventsType;
+    public EventsType raise() {
+        return this.events;
     }
 
-    private static <ObservablesEventsType extends IObservablesEvents> ObservablesEventsType
-        buildRaiser(Class<ObservablesEventsType> raisableObservablesEventsType, IObserverMerger observerMerger) {
+    private static <EventsType extends IEvents>
+        EventsType buildRaiser(Class<EventsType> eventsType, IObserverMerger observerMerger) {
 
         final InvocationHandler invocationHandler = (proxy, method, methodArgs) -> {
             final Class<?>[] methodArgsType = method.getParameterTypes();
@@ -41,13 +40,13 @@ public final class EventRaiser<ObservablesEventsType extends IObservablesEvents>
             final Class<?> declaringMethodClass = method.getDeclaringClass();
 
             for (final IObserver<?> currentObserver : observerMerger.getAllObservers()) {
-                final Class<? extends IObservablesEvents> currentObservedEventsType =
+                final Class<? extends IEvents> currentObservedEventsType =
                     currentObserver.getObservedEventsType();
 
-                if (IObservablesEvents.class.isAssignableFrom(declaringMethodClass)
+                if (IEvents.class.isAssignableFrom(declaringMethodClass)
                         && declaringMethodClass.isAssignableFrom(currentObservedEventsType)
-                        || getAllInterfaces(raisableObservablesEventsType)
-                            .anyMatch(interfaceType -> IObservablesEvents.class.isAssignableFrom(interfaceType)
+                        || getAllInterfaces(eventsType)
+                            .anyMatch(interfaceType -> IEvents.class.isAssignableFrom(interfaceType)
                                 && interfaceType.isAssignableFrom(currentObservedEventsType)
                                 && Arrays.stream(interfaceType.getMethods())
                                     .anyMatch(imethod -> {
@@ -67,9 +66,9 @@ public final class EventRaiser<ObservablesEventsType extends IObservablesEvents>
             }
             return null;
         };
-        return raisableObservablesEventsType.cast(Proxy.newProxyInstance(raisableObservablesEventsType.getClassLoader(),
-                                                                         new Class[] { raisableObservablesEventsType },
-                                                                         invocationHandler));
+        return eventsType.cast(Proxy.newProxyInstance(eventsType.getClassLoader(),
+                                                      new Class[] { eventsType },
+                                                      invocationHandler));
     }
     
     private static Stream<Class<?>> getAllInterfaces(Class<?> type) {

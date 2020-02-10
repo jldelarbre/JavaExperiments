@@ -1,4 +1,4 @@
 package com.github.jldelarbre.javaExperiments.observer.observer;
 
-public interface IObservablesEvents {
+public interface IEvents {
 }

@@ -4,32 +4,32 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.github.jldelarbre.javaExperiments.observer.observer.IObservable;
-import com.github.jldelarbre.javaExperiments.observer.observer.IObservablesEvents;
+import com.github.jldelarbre.javaExperiments.observer.observer.IEvents;
 import com.github.jldelarbre.javaExperiments.observer.observer.IObserver;
 
-public final class Observable<ObservablesEventsType extends IObservablesEvents, ObserverType extends IObserver<? extends ObservablesEventsType>>
-        implements IObservable<ObservablesEventsType, ObserverType> {
+public final class Observable<EventsType extends IEvents, ObserverType extends IObserver<? extends EventsType>>
+        implements IObservable<EventsType, ObserverType> {
 
-    private final Class<ObservablesEventsType> observablesEventsType;
+    private final Class<EventsType> eventsType;
     private final Set<ObserverType> observers;
 
     private boolean enable = true;
 
-    private Observable(Class<ObservablesEventsType> observablesEventsType) {
-        this.observablesEventsType = observablesEventsType;
+    private Observable(Class<EventsType> eventsType) {
+        this.eventsType = eventsType;
         this.observers = new HashSet<>();
     }
 
-    public static <ObservablesEventsType extends IObservablesEvents, ObserverType extends IObserver<? extends ObservablesEventsType>>
-        Observable<ObservablesEventsType, ObserverType>
-        build(Class<ObservablesEventsType> observablesEventsType) {
+    public static <EventsType extends IEvents, ObserverType extends IObserver<? extends EventsType>>
+        Observable<EventsType, ObserverType>
+        build(Class<EventsType> eventsType) {
         
-        return new Observable<>(observablesEventsType);
+        return new Observable<>(eventsType);
     }
 
     @Override
-    public Class<ObservablesEventsType> getObservablesEventsType() {
-        return this.observablesEventsType;
+    public Class<EventsType> getObservableEventsType() {
+        return this.eventsType;
     }
 
     @Override

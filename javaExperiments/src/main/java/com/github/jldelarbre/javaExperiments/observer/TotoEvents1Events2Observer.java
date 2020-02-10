@@ -2,7 +2,7 @@ package com.github.jldelarbre.javaExperiments.observer;
 
 public class TotoEvents1Events2Observer implements ITotoEvents1Events2Observer {
 
-    public static class InnerObserverImpl implements IObservableTotosEvents1Events2 {
+    public static class InnerObserverImpl implements ITotosEvents1Events2 {
         @Override
         public void eventCommon() {
             System.out.println("TotoEvents1Events2Observer.eventCommon()");
@@ -40,12 +40,12 @@ public class TotoEvents1Events2Observer implements ITotoEvents1Events2Observer {
     }
 
     @Override
-    public IObservableTotosEvents1Events2 process() {
+    public ITotosEvents1Events2 process() {
         return new InnerObserverImpl();
     }
 
     @Override
-    public Class<IObservableTotosEvents1Events2> getObservedEventsType() {
-        return IObservableTotosEvents1Events2.class;
+    public Class<ITotosEvents1Events2> getObservedEventsType() {
+        return ITotosEvents1Events2.class;
     }
 }

@@ -1,17 +1,17 @@
 package com.github.jldelarbre.javaExperiments.observer.observer;
 
-public interface IEventRaiser<ObservablesEventsType extends IObservablesEvents> {
+public interface IEventRaiser<EventsType extends IEvents> {
 
-    ObservablesEventsType raise();
+    EventsType raise();
     // raise_async
     // raise_sync
 
-    interface IProxy<ObservablesEventsType extends IObservablesEvents> extends IEventRaiser<ObservablesEventsType> {
+    interface IProxy<EventsType extends IEvents> extends IEventRaiser<EventsType> {
 
-        IEventRaiser<ObservablesEventsType> getRaiser();
+        IEventRaiser<EventsType> getRaiser();
 
         @Override
-        default ObservablesEventsType raise() {
+        default EventsType raise() {
             return getRaiser().raise();
         }
     }

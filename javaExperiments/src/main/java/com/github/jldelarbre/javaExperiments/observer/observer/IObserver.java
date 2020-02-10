@@ -1,9 +1,9 @@
 package com.github.jldelarbre.javaExperiments.observer.observer;
 
-public interface IObserver<ObservablesEventsType extends IObservablesEvents> {
-    ObservablesEventsType process();
+public interface IObserver<EventsType extends IEvents> {
+    EventsType process();
 
-    Class<ObservablesEventsType> getObservedEventsType();
+    Class<EventsType> getObservedEventsType();
 
     default String getObserverDescription() {
         return getObservedEventsType().getSimpleName() + " observer";
