@@ -11,19 +11,12 @@ import com.github.jldelarbre.javaExperiments.observer.observer.IEventRaiser;
 import com.github.jldelarbre.javaExperiments.observer.observer.IEvents;
 import com.github.jldelarbre.javaExperiments.observer.observer.IObserver;
 
-public final class EventRaiser<EventsType extends IEvents> implements IEventRaiser<EventsType> {
+final class EventRaiser<EventsType extends IEvents> implements IEventRaiser<EventsType> {
 
     private final EventsType events;
 
-    private EventRaiser(EventsType events) {
+    EventRaiser(EventsType events) {
         this.events = events;
-    }
-
-    public static <EventsType extends IEvents>
-        EventRaiser<EventsType> build(Class<EventsType> eventsType, IObserverMerger observerMerger) {
-
-        final EventsType events = buildRaiser(eventsType, observerMerger);
-        return new EventRaiser<>(events);
     }
 
     @Override
@@ -31,7 +24,7 @@ public final class EventRaiser<EventsType extends IEvents> implements IEventRais
         return this.events;
     }
 
-    private static <EventsType extends IEvents>
+    static <EventsType extends IEvents>
         EventsType buildRaiser(Class<EventsType> eventsType, IObserverMerger observerMerger) {
 
         final InvocationHandler invocationHandler = (proxy, method, methodArgs) -> {

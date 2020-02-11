@@ -7,7 +7,7 @@ import com.github.jldelarbre.javaExperiments.observer.observer.IObservable;
 import com.github.jldelarbre.javaExperiments.observer.observer.IEvents;
 import com.github.jldelarbre.javaExperiments.observer.observer.IObserver;
 
-public final class Observable<EventsType extends IEvents, ObserverType extends IObserver<? extends EventsType>>
+final class Observable<EventsType extends IEvents, ObserverType extends IObserver<? extends EventsType>>
         implements IObservable<EventsType, ObserverType> {
 
     private final Class<EventsType> eventsType;
@@ -15,16 +15,9 @@ public final class Observable<EventsType extends IEvents, ObserverType extends I
 
     private boolean enable = true;
 
-    private Observable(Class<EventsType> eventsType) {
+    Observable(Class<EventsType> eventsType) {
         this.eventsType = eventsType;
         this.observers = new HashSet<>();
-    }
-
-    public static <EventsType extends IEvents, ObserverType extends IObserver<? extends EventsType>>
-        Observable<EventsType, ObserverType>
-        build(Class<EventsType> eventsType) {
-        
-        return new Observable<>(eventsType);
     }
 
     @Override
