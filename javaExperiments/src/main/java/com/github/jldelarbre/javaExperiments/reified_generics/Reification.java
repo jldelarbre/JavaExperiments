@@ -85,10 +85,30 @@ public class Reification {
     //////////////////////////////////////////////////////////////////////
     
     // Dummy class for tests
-    interface IA1 {}
-    interface IA2 extends IA1 {}
-    static class A implements IA2 {}
+    static class A {}
     static class B extends A {}
+    
+    @SuppressWarnings("unused")
+    void aboutReturnOfClassType() {
+        A a = new B();
+        
+        // We cannot know the exact type from a reference: getClass shall return using '?'
+        Class<? extends A> class1a = a.getClass();
+        Class<?> class1b = a.getClass();
+        
+        List<A> la = new ArrayList<>();
+        // With nested generic, getClass forces to use rawtypes or to uncheck type even with Class<? extends List<?>>
+        // ArrayList<A> inherits from List<A> but List<AnyThing_even_extending_A> inherits from List<A>
+        // so Class<? extends List<A>> should be authorized ??
+        @SuppressWarnings("rawtypes")
+        Class<? extends List> class2a = la.getClass();
+        @SuppressWarnings("unchecked")
+        Class<? extends List<?>> class2b = (Class<? extends List<?>>) la.getClass();
+        @SuppressWarnings("unchecked")
+        Class<? extends List<A>> class2c = (Class<? extends List<A>>) la.getClass();
+        
+        Class<?> class2d = la.getClass();
+    }
     
     // Reified Generic Type Definition
     public interface MyReifiedGeneric<T, U extends A> extends ReifiedGeneric<MyReifiedGeneric<T, U>> {
@@ -97,15 +117,25 @@ public class Reification {
         U getParam2();
     }
     
+    public interface MyReifiedGeneric2<T, U extends A> extends ReifiedGeneric<MyReifiedGeneric2<T, U>> {
+        T getParam3();
+        
+        U getParam4();
+    }
+    
     // Reified Generic Type Implementation: type passed by constructor argument
     //
-    // Impossible to implement ReifiedGeneric<MyReifiedGenericImpl1<T, U>>
+    // Impossible to implement MyReifiedGeneric2<V, W>
     // otherwise ReifiedGeneric will be inherit with 2 different generic parameters:
-    // MyReifiedGeneric<T, U> and MyReifiedGenericImpl1<T, U>
+    // MyReifiedGeneric<T, U> and MyReifiedGeneric2<T, U>
     //
     // Example: impossible to have:
     //     class SomeClass implements List<String>, List<Double> {...}
-    static final class MyReifiedGenericImpl1<T, U extends A> implements MyReifiedGeneric<T, U>/*, ReifiedGeneric<MyReifiedGenericImpl1<T, U>>*/ {
+    //
+    // Impossible to inherit from many ReifiedGeneric => remove generic type from ReifiedGeneric
+    // see also: aboutReturnOfClassType()
+    //
+    static final class MyReifiedGenericImpl1<T, U extends A/*, V, W*/> implements MyReifiedGeneric<T, U>/*, MyReifiedGeneric2<V, W>*/ {
         private final ReifiedGenericType<MyReifiedGeneric<T, U>> reifiedGenericType;
         
         private final T param1;
